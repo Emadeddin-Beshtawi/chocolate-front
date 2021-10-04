@@ -15,7 +15,6 @@ class MyFavorites extends React.Component {
       favChocolates: [],
       show: false,
       selectedChocolate: {},
-    
     };
   }
 
@@ -48,64 +47,35 @@ class MyFavorites extends React.Component {
 
   ////////////////// UP ////////////////////
 
-    updateItem = async (e)=>{
+  updateItem = async (e) => {
+    const id = this.state.selectedChocolate._id;
+    const body = {
+      title: e.target.title.value,
+      imageUrl: e.target.imageUrl.value,
+    };
+    const req = await axios.put(
+      `${process.env.REACT_APP_SERVER}/updatedChocolate/${id}`,
+      body
+    );
+    const newItem = this.state.favChocolates.map((obj) => {
+      if (obj._id === id) {
+        obj.title = req.data.title;
+        obj.imageUrl = req.data.imageUrl;
 
-      const id = this.state.selectedChocolate._id;
-      const body ={
-          title:e.target.title.value,
-          imageUrl:e.target.imageUrl.value,
-
+        return obj;
       }
-      const req= await axios.put(`${process.env.REACT_APP_SERVER}/updatedChocolate/${id}`,body);
-      const newItem = this.state.favChocolates.map(obj=>{
-          if(obj._id === id){
-              obj.title = req.data.title
-              obj.imageUrl=req.data.imageUrl
-
-              return obj
-          }
-          return obj
-      });
-      this.setState({favChocolates:newItem});
-      this.updateChocolate({});
-      this.setState({show:false})
-  }
+      return obj;
+    });
+    this.setState({ favChocolates: newItem });
+    this.updateChocolate({});
+    this.setState({ show: false });
+  };
 
   handleClose = () => {
     this.setState({
       show: false,
     });
   };
-  ////////////////////////////// 222222222222 ////////////////////
- 
-
-
-  ///////////////////// PREV /////////////////////////////
-  // updateItem = async (e) => {
-  //   e.preventDefault();
-  //   const newItem = {
-  //     title: e.target.title.value,
-  //     imageUrl: e.target.imageUrl.value,
-  //     id: this.state.selectedChocolate._id,
-  //     email: this.props.auth0.user.email,
-  //   };
-  //   await axios
-  //     .put(`${process.env.REACT_APP_SERVER}/updatedChocolate`, newItem)
-  //     .then((results) => {
-  //       this.setState({
-  //         favChocolates: results.data,
-  //         show: false,
-  //       });
-  //     });
-  // };
-
-  // handleClose = () => {
-  //   this.setState({
-  //     show: false,
-  //   });
-  // };
-
-  ///////////////////// End UP //////////////
 
   render() {
     return (
