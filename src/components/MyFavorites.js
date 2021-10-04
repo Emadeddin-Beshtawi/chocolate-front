@@ -21,7 +21,7 @@ class MyFavorites extends React.Component {
   componentDidMount = async () => {
     await axios
       .get(
-        `${process.env.REACT_APP_SERVER}/getChocolate?email=${this.props.auth0.user.email}`
+        `https://chocolate-emadeddin.herokuapp.com/getChocolate?email=${this.props.auth0.user.email}`
       )
       .then((results) => {
         this.setState({
@@ -38,37 +38,43 @@ class MyFavorites extends React.Component {
   };
 
   deleteChocolate = async (id) => {
-    await axios.delete(`${process.env.REACT_APP_SERVER}/deleteChocolate/${id}`);
-    const items = this.state.favChocolates.filter((obj) => obj._id !== id);
-    this.setState({
-      favChocolates: items,
-    });
+    await axios.delete(
+      `https://chocolate-emadeddin.herokuapp.com/deleteChocolate/${id}`
+    );
+    // const items = this.state.favChocolates.filter((obj) => obj._id !== id);
+    // this.setState({
+    //   favChocolates: items,
+    // });
+    this.componentDidMount();
   };
 
   ////////////////// UP ////////////////////
 
   updateItem = async (e) => {
+    e.preventDefault();
     const id = this.state.selectedChocolate._id;
     const body = {
       title: e.target.title.value,
       imageUrl: e.target.imageUrl.value,
     };
     const req = await axios.put(
-      `${process.env.REACT_APP_SERVER}/updatedChocolate/${id}`,
+      `https://chocolate-emadeddin.herokuapp.com/updatedChocolate/${id}`,
       body
     );
-    const newItem = this.state.favChocolates.map((obj) => {
-      if (obj._id === id) {
-        obj.title = req.data.title;
-        obj.imageUrl = req.data.imageUrl;
+    console.log(req.data);
+    // const newItem = this.state.favChocolates.map((obj) => {
+    //   if (obj._id === id) {
+    //     obj.title = req.data.title;
+    //     obj.imageUrl = req.data.imageUrl;
 
-        return obj;
-      }
-      return obj;
-    });
-    this.setState({ favChocolates: newItem });
-    this.updateChocolate({});
+    //     return obj;
+    //   }
+    //   return obj;
+    // });
+    // this.setState({ favChocolates: newItem });
+    // this.updateChocolate({});
     this.setState({ show: false });
+    this.componentDidMount();
   };
 
   handleClose = () => {

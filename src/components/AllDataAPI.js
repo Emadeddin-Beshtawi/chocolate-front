@@ -15,7 +15,7 @@ class AllDataAPI extends Component {
 
     async componentDidMount() {
 
-        await axios.get(`${process.env.REACT_APP_SERVER}/getDataFromAPI`).then(results => {
+        await axios.get(`https://chocolate-emadeddin.herokuapp.com/getDataFromAPI`).then(results => {
             this.setState({
                 allChocolates: results.data
             })
@@ -25,7 +25,7 @@ class AllDataAPI extends Component {
 
     addToFav = async (chocolate) => {
         chocolate.email = this.props.auth0.user.email;
-        await axios.post(`${process.env.REACT_APP_SERVER}/createChocolate`, chocolate);
+        await axios.post(`https://chocolate-emadeddin.herokuapp.com/createChocolate`, chocolate);
     }
     render() {
         return (
